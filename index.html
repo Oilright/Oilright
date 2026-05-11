@@ -1,0 +1,3027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oilright - Mobile Oil Changes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .nav {
+            background: #1a1a1a;
+            padding: 15px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #F9A825;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #F9A825;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            display: inline-block;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #F9A825;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid #333;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-btn:hover {
+            border-color: #F9A825;
+            color: #F9A825;
+            background: rgba(249, 168, 37, 0.1);
+        }
+
+        .nav-btn.active {
+            background: #F9A825;
+            color: #000;
+            border-color: #F9A825;
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 5px;
+            background: #0a0a0a;
+            padding: 5px;
+            border-radius: 8px;
+            border: 2px solid #333;
+        }
+
+        .lang-btn {
+            background: transparent;
+            color: #999;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .lang-btn:hover {
+            color: #F9A825;
+        }
+
+        .lang-btn.active {
+            background: #F9A825;
+            color: #000;
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Form Styles */
+        .form-container {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 2px solid #333;
+        }
+
+        .page-title {
+            font-size: 32px;
+            color: #F9A825;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: #999;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #F9A825;
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: #0a0a0a;
+            border: 2px solid #333;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #F9A825;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        option {
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #F9A825 0%, #ff6f00 100%);
+            color: #000;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(249, 168, 37, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #F9A825;
+            color: #F9A825;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(249, 168, 37, 0.1);
+        }
+
+        /* Calendar Styles */
+        .calendar-container {
+            background: #0a0a0a;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .calendar-header button {
+            background: #F9A825;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .calendar-month {
+            font-size: 16px;
+            font-weight: 600;
+            color: #F9A825;
+            text-align: center;
+            flex: 1;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            width: 100%;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            padding: 8px 4px;
+            font-weight: 600;
+            color: #999;
+            font-size: 11px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 4px;
+            font-size: 13px;
+            min-height: 40px;
+            position: relative;
+        }
+
+        /* Clickable dates have white border */
+        .calendar-day:not(.disabled):not(.other-month) {
+            border-color: #ffffff;
+        }
+
+        .calendar-day:hover:not(.disabled):not(.other-month) {
+            border-color: #F9A825;
+            background: rgba(249, 168, 37, 0.1);
+        }
+
+        .calendar-day.selected {
+            background: #F9A825;
+            color: #000;
+            border-color: #F9A825;
+            font-weight: 700;
+        }
+
+        .calendar-day.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.3;
+        }
+
+        /* TODAY'S DATE - SQUARE BORDER */
+        .calendar-day.today {
+            border: 3px solid #F9A825 !important;
+            box-shadow: 0 0 10px rgba(249, 168, 37, 0.5);
+        }
+
+        .calendar-day.has-appointments {
+            cursor: pointer;
+        }
+
+        .calendar-day.no-appointments {
+            cursor: default;
+            opacity: 0.5;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .time-slot {
+            background: #0a0a0a;
+            border: 2px solid #333;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .time-slot:hover:not(.disabled) {
+            border-color: #F9A825;
+            background: rgba(249, 168, 37, 0.1);
+        }
+
+        .time-slot.selected {
+            background: #F9A825;
+            color: #000;
+            border-color: #F9A825;
+        }
+
+        .time-slot.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .time-slot-capacity {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .success-message h2 {
+            color: #F9A825;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+
+        .success-message p {
+            color: #999;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        /* Admin & Partners Pages */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .admin-section {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .section-title {
+            color: #F9A825;
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+
+        .item-list {
+            list-style: none;
+        }
+
+        .item-list li {
+            background: #0a0a0a;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #333;
+        }
+
+        .delete-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .delete-btn:hover {
+            background: #cc0000;
+        }
+
+        .appointments-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .appointment-card {
+            background: #0a0a0a;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+
+        .appointment-card:hover {
+            border-color: #F9A825;
+        }
+
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .appointment-date {
+            color: #F9A825;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* UPDATED STATUS COLORS */
+        .status-confirmed {
+            background: #FFC107;
+            color: #000;
+        }
+
+        .status-completed {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .appointment-details {
+            display: grid;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .appointment-detail {
+            display: flex;
+            gap: 10px;
+        }
+
+        .detail-label {
+            color: #999;
+            min-width: 100px;
+        }
+
+        .detail-value {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .appointment-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        /* Password Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #F9A825;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            color: #F9A825;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .availability-modal-content {
+            max-width: 600px;
+        }
+
+        .time-window-section {
+            background: #0a0a0a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #333;
+        }
+
+        .time-window-section h3 {
+            color: #F9A825;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .partner-checkboxes {
+            display: grid;
+            gap: 10px;
+        }
+
+        .partner-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .partner-checkbox-item:hover {
+            background: #222;
+        }
+
+        .partner-checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .partner-checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            flex: 1;
+            color: #fff;
+        }
+
+        .error-message {
+            color: #ff4444;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .time-window-config {
+            display: grid;
+            gap: 15px;
+        }
+
+        .time-window-item {
+            background: #0a0a0a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .time-window-item h4 {
+            color: #F9A825;
+            margin-bottom: 10px;
+        }
+
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .time-inputs input {
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .availability-calendar {
+            margin-top: 20px;
+        }
+
+        .availability-day {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: #0a0a0a;
+            border-radius: 6px;
+            border: 1px solid #333;
+        }
+
+        .availability-checkboxes {
+            display: flex;
+            gap: 15px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 10px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-btn {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+
+            .lang-toggle {
+                padding: 3px;
+            }
+
+            .lang-btn {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .form-container {
+                padding: 20px 15px;
+                border-radius: 0;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .page-subtitle {
+                font-size: 13px;
+            }
+
+            .calendar-container {
+                padding: 10px;
+            }
+
+            .calendar-day {
+                font-size: 12px;
+                min-height: 35px;
+            }
+
+            .calendar-day-header {
+                font-size: 10px;
+                padding: 6px 2px;
+            }
+
+            .calendar-month {
+                font-size: 14px;
+            }
+
+            .calendar-header button {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .time-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .appointment-card {
+                padding: 15px;
+            }
+
+            .modal-content {
+                padding: 20px;
+                max-width: 95%;
+            }
+
+            .time-window-section {
+                padding: 12px;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+
+            .btn-small {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+        }
+
+        /* Loading Spinner */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .spinner {
+            border: 3px solid #333;
+            border-top: 3px solid #F9A825;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                </svg>
+            </div>
+            <span>OILRIGHT</span>
+        </div>
+        <div class="nav-links">
+            <button class="nav-btn active" onclick="switchPage('booking')" data-translate="navBooking">🏠 Booking</button>
+            <button class="nav-btn" onclick="switchPage('partners')" data-translate="navPartners">📅 Partners</button>
+            <button class="nav-btn" onclick="showAdminLogin()" data-translate="navAdmin">⚙️ Admin</button>
+            <div class="lang-toggle">
+                <button class="lang-btn active" data-lang="en" onclick="switchLanguage('en')">ENG</button>
+                <button class="lang-btn" data-lang="fr" onclick="switchLanguage('fr')">FR</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BOOKING PAGE -->
+    <div id="booking" class="page active">
+        <div class="form-container">
+            <h1 class="page-title" data-translate="bookingTitle">Garage Partner Portal</h1>
+            <p class="page-subtitle" data-translate="bookingSubtitle">Premium Mobile Synthetic Oil Changes</p>
+
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label for="partnerName" data-translate="partnerName">Partner Name *</label>
+                    <select id="partnerName" required>
+                        <option value="" data-translate="selectPartner">Select partner...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="customerName" data-translate="customerName">Customer Name *</label>
+                    <input type="text" id="customerName" required placeholder="John Doe">
+                </div>
+
+                <div class="form-group">
+                    <label for="customerPhone" data-translate="customerPhone">Customer Phone *</label>
+                    <input type="tel" id="customerPhone" required placeholder="(123) 456-7890">
+                </div>
+
+                <div class="form-group">
+                    <label for="vehicleYear" data-translate="vehicleYear">Vehicle Year *</label>
+                    <select id="vehicleYear" required onchange="loadMakes()">
+                        <option value="" data-translate="selectYear">Select year...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="vehicleMake" data-translate="vehicleMake">Vehicle Make *</label>
+                    <select id="vehicleMake" required onchange="loadModels()" disabled>
+                        <option value="" data-translate="selectMake">Select make...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="vehicleModel" data-translate="vehicleModel">Vehicle Model *</label>
+                    <select id="vehicleModel" required onchange="loadEngines()" disabled>
+                        <option value="" data-translate="selectModel">Select model...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="engineSize" data-translate="engineSize">Engine Size *</label>
+                    <select id="engineSize" required disabled>
+                        <option value="" data-translate="selectEngine">Select engine...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes" data-translate="notes">Notes / Additional Information</label>
+                    <textarea id="notes" data-translate="notesPlaceholder" placeholder="Any special instructions or information..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label data-translate="selectDateTime">Select Date & Time *</label>
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                            <button type="button" onclick="changeMonth(-1)" data-translate="prevMonth">← Prev</button>
+                            <div class="calendar-month" id="calendarMonth"></div>
+                            <button type="button" onclick="changeMonth(1)" data-translate="nextMonth">Next →</button>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid"></div>
+                        <div class="time-slots" id="timeSlots"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn" data-translate="bookButton">Book Appointment</button>
+            </form>
+
+            <div class="success-message" id="bookingSuccess">
+                <div class="success-icon">✅</div>
+                <h2 data-translate="bookingSuccess">Appointment Booked!</h2>
+                <p id="confirmationDetails"></p>
+                <button class="btn" onclick="resetBookingForm()" data-translate="bookAnother">Book Another Appointment</button>
+                <button class="btn btn-secondary" onclick="location.reload()" data-translate="backToBooking">Back to Booking Page</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PARTNERS PAGE -->
+    <div id="partners" class="page">
+        <div class="form-container" style="max-width: 900px;">
+            <h1 class="page-title" data-translate="partnersTitle">Partner Appointments</h1>
+            <p class="page-subtitle" data-translate="partnersSubtitle">View and manage your appointments</p>
+
+            <div class="form-group">
+                <label for="partnerFilter" data-translate="filterByPartner">Filter by Partner</label>
+                <select id="partnerFilter" onchange="filterAppointments()">
+                    <option value="" data-translate="selectPartner">Select partner...</option>
+                </select>
+            </div>
+
+            <div id="partnerCalendarView" style="display: none;">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button type="button" onclick="changePartnerMonth(-1)" data-translate="prevMonth">← Prev</button>
+                        <div class="calendar-month" id="partnerCalendarMonth"></div>
+                        <button type="button" onclick="changePartnerMonth(1)" data-translate="nextMonth">Next →</button>
+                    </div>
+                    <div class="calendar-grid" id="partnerCalendarGrid"></div>
+                </div>
+                
+                <div class="appointments-list" id="partnerAppointmentsList" style="margin-top: 20px;"></div>
+            </div>
+
+            <div id="partnerEmptyState" style="text-align: center; padding: 60px 20px; color: #999;">
+                <p data-translate="selectPartner">Select a partner to view appointments</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN PAGE -->
+    <div id="admin" class="page">
+        <h1 class="page-title" data-translate="adminTitle">Admin Dashboard</h1>
+        <p class="page-subtitle" data-translate="adminSubtitle">Manage your Oilright booking system</p>
+
+        <div class="admin-grid">
+            <!-- Partners Management -->
+            <div class="admin-section">
+                <h3 class="section-title" data-translate="partnerManagement">Partner Management</h3>
+                <div class="form-group">
+                    <input type="text" id="newPartnerName" data-translate="enterPartnerName" placeholder="Enter partner name">
+                    <button class="btn" onclick="addPartner()" style="margin-top: 10px;" data-translate="addPartner">Add Partner</button>
+                </div>
+                <ul class="item-list" id="partnersList"></ul>
+            </div>
+
+            <!-- Time Windows Configuration -->
+            <div class="admin-section">
+                <h3 class="section-title" data-translate="timeWindowsConfig">Time Windows Configuration</h3>
+                <div class="time-window-config">
+                    <div class="time-window-item">
+                        <h4 data-translate="morning">Morning</h4>
+                        <div class="time-inputs">
+                            <input type="time" id="morningStart" value="08:00">
+                            <input type="time" id="morningEnd" value="12:00">
+                            <input type="number" id="morningCapacity" value="5" min="1" max="20" data-translate="capacity" placeholder="Capacity">
+                        </div>
+                    </div>
+                    <div class="time-window-item">
+                        <h4 data-translate="afternoon">Afternoon</h4>
+                        <div class="time-inputs">
+                            <input type="time" id="afternoonStart" value="13:00">
+                            <input type="time" id="afternoonEnd" value="17:00">
+                            <input type="number" id="afternoonCapacity" value="5" min="1" max="20" data-translate="capacity" placeholder="Capacity">
+                        </div>
+                    </div>
+                    <div class="time-window-item">
+                        <h4 data-translate="evening">Evening</h4>
+                        <div class="time-inputs">
+                            <input type="time" id="eveningStart" value="18:00">
+                            <input type="time" id="eveningEnd" value="20:00">
+                            <input type="number" id="eveningCapacity" value="5" min="1" max="20" data-translate="capacity" placeholder="Capacity">
+                        </div>
+                    </div>
+                </div>
+                <button class="btn" onclick="saveTimeWindows()" style="margin-top: 15px;" data-translate="saveTimeWindows">Save Time Windows</button>
+            </div>
+
+            <!-- Availability Calendar -->
+            <div class="admin-section" style="grid-column: 1 / -1;">
+                <h3 class="section-title" data-translate="availabilityCalendar">Availability Calendar</h3>
+                <p style="color: #999; margin-bottom: 15px; font-size: 14px;" data-translate="availabilityNote">Click dates to set which partners are available for each time window</p>
+                <div id="availabilityCalendar"></div>
+            </div>
+
+            <!-- Schedule View -->
+            <div class="admin-section" style="grid-column: 1 / -1;">
+                <h3 class="section-title" data-translate="allAppointments">All Appointments</h3>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button type="button" onclick="changeAdminMonth(-1)" data-translate="prevMonth">← Prev</button>
+                        <div class="calendar-month" id="adminCalendarMonth"></div>
+                        <button type="button" onclick="changeAdminMonth(1)" data-translate="nextMonth">Next →</button>
+                    </div>
+                    <div class="calendar-grid" id="adminCalendarGrid"></div>
+                </div>
+                <div class="appointments-list" id="adminAppointments"></div>
+            </div>
+
+            <!-- History Section -->
+            <div class="admin-section" style="grid-column: 1 / -1;">
+                <h3 class="section-title" data-translate="appointmentHistory">Appointment History</h3>
+                <p style="color: #999; margin-bottom: 15px; font-size: 14px;" data-translate="historyNote">View all past appointments</p>
+                <div class="appointments-list" id="appointmentHistory"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <h2 class="modal-title" data-translate="adminAccess">Admin Access</h2>
+            <div class="form-group">
+                <label for="adminPassword" data-translate="enterPassword">Enter Password</label>
+                <input type="password" id="adminPassword" data-translate="passwordPlaceholder" placeholder="Enter admin password">
+            </div>
+            <button class="btn" onclick="checkAdminPassword()" data-translate="accessAdmin">Access Admin</button>
+            <button class="btn btn-secondary" onclick="closeAdminModal()" data-translate="cancel">Cancel</button>
+            <div class="error-message" id="passwordError"></div>
+        </div>
+    </div>
+
+    <!-- Availability Modal -->
+    <div class="modal" id="availabilityModal">
+        <div class="modal-content availability-modal-content">
+            <h2 class="modal-title" id="availabilityModalTitle">Set Availability</h2>
+            <div id="availabilityModalBody"></div>
+            <button class="btn" onclick="saveAvailabilityFromModal()">Save Availability</button>
+            <button class="btn btn-secondary" onclick="closeAvailabilityModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Edit Appointment Modal (PARTNER VERSION - NO STATUS EDIT) -->
+    <div class="modal" id="editAppointmentModalPartner">
+        <div class="modal-content availability-modal-content">
+            <h2 class="modal-title">Edit Appointment</h2>
+            <div style="max-height: 60vh; overflow-y: auto;">
+                <div class="form-group">
+                    <label for="editCustomerNamePartner">Customer Name</label>
+                    <input type="text" id="editCustomerNamePartner">
+                </div>
+                <div class="form-group">
+                    <label for="editCustomerPhonePartner">Customer Phone</label>
+                    <input type="tel" id="editCustomerPhonePartner">
+                </div>
+                <div class="form-group">
+                    <label for="editVehicleYearPartner">Vehicle Year</label>
+                    <select id="editVehicleYearPartner" onchange="loadMakesForEditPartner()"></select>
+                </div>
+                <div class="form-group">
+                    <label for="editVehicleMakePartner">Vehicle Make</label>
+                    <select id="editVehicleMakePartner" onchange="loadModelsForEditPartner()"></select>
+                </div>
+                <div class="form-group">
+                    <label for="editVehicleModelPartner">Vehicle Model</label>
+                    <select id="editVehicleModelPartner" onchange="loadEnginesForEditPartner()"></select>
+                </div>
+                <div class="form-group">
+                    <label for="editEngineSizePartner">Engine Size</label>
+                    <select id="editEngineSizePartner"></select>
+                </div>
+                <div class="form-group">
+                    <label for="editDatePartner">Date</label>
+                    <input type="date" id="editDatePartner">
+                </div>
+                <div class="form-group">
+                    <label for="editTimeSlotPartner">Time Slot</label>
+                    <select id="editTimeSlotPartner">
+                        <option value="morning">Morning</option>
+                        <option value="afternoon">Afternoon</option>
+                        <option value="evening">Evening</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editNotesPartner">Notes</label>
+                    <textarea id="editNotesPartner"></textarea>
+                </div>
+                <!-- STATUS DISPLAY ONLY - NOT EDITABLE -->
+                <div class="form-group">
+                    <label>Status (Read-Only)</label>
+                    <div id="editStatusDisplayPartner" style="padding: 10px; background: #0a0a0a; border: 2px solid #333; border-radius: 8px;"></div>
+                </div>
+            </div>
+            <button class="btn" onclick="saveEditedAppointmentPartner()">Save Changes</button>
+            <button class="btn btn-secondary" onclick="closeEditAppointmentModalPartner()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Edit Appointment Modal (ADMIN VERSION - WITH STATUS EDIT) -->
+    <div class="modal" id="editAppointmentModal">
+        <div class="modal-content availability-modal-content">
+            <h2 class="modal-title">Edit Appointment</h2>
+            <div style="max-height: 60vh; overflow-y: auto;">
+                <div class="form-group">
+                    <label for="editPartnerName">Partner Name</label>
+                    <select id="editPartnerName"></select>
+                </div>
+                <div class="form-group">
+                    <label for="editCustomerName">Customer Name</label>
+                    <input type="text" id="editCustomerName">
+                </div>
+                <div class="form-group">
+                    <label for="editCustomerPhone">Customer Phone</label>
+                    <input type="tel" id="editCustomerPhone">
+                </div>
+                <div class="form-group">
+                    <label for="editVehicleYear">Vehicle Year</label>
+                    <select id="editVehicleYear" onchange="loadMakesForEdit()"></select>
+                </div>
+                <div class="form-group">
+                    <label for="editVehicleMake">Vehicle Make</label>
+                    <select id="editVehicleMake" onchange="loadModelsForEdit()"></select>
+                </div>
+                <div class="form-group">
+                    <label for="editVehicleModel">Vehicle Model</label>
+                    <select id="editVehicleModel" onchange="loadEnginesForEdit()"></select>
+                </div>
+                <div class="form-group">
+                    <label for="editEngineSize">Engine Size</label>
+                    <select id="editEngineSize"></select>
+                </div>
+                <div class="form-group">
+                    <label for="editDate">Date</label>
+                    <input type="date" id="editDate">
+                </div>
+                <div class="form-group">
+                    <label for="editTimeSlot">Time Slot</label>
+                    <select id="editTimeSlot">
+                        <option value="morning">Morning</option>
+                        <option value="afternoon">Afternoon</option>
+                        <option value="evening">Evening</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editNotes">Notes</label>
+                    <textarea id="editNotes"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editStatus">Status</label>
+                    <select id="editStatus">
+                        <option value="confirmed">Confirmed</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn" onclick="saveEditedAppointment()">Save Changes</button>
+            <button class="btn btn-secondary" onclick="closeEditAppointmentModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK - v9 Modular (Most Stable) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    
+    <!-- Firebase Loading Diagnostics -->
+    <script>
+        console.log('🔍 Firebase Diagnostic Check...');
+        
+        if (typeof firebase === 'undefined') {
+            console.error('❌ CRITICAL: Firebase SDK failed to load from CDN');
+            console.error('❌ This app REQUIRES Firebase for multi-device sync');
+            console.error('');
+            console.error('🔧 Troubleshooting Steps:');
+            console.error('1. Check internet connection');
+            console.error('2. Disable ad blockers (uBlock, AdBlock, etc.)');
+            console.error('3. Try different browser (Chrome recommended)');
+            console.error('4. Check if firewall is blocking www.gstatic.com');
+            console.error('5. Try opening in Incognito/Private mode');
+            console.error('');
+            
+            // Show user-visible error
+            setTimeout(() => {
+                alert('⚠️ FIREBASE CONNECTION FAILED\n\nThe database cannot be reached. This app requires Firebase to work.\n\nPlease:\n1. Check your internet connection\n2. Disable ad blockers\n3. Try a different browser\n4. Contact support if issue persists');
+            }, 1000);
+        } else {
+            console.log('✅ Firebase SDK loaded successfully');
+            console.log('📦 Firebase version:', firebase.SDK_VERSION);
+        }
+    </script>
+
+    <script>
+        // ===========================
+        // GLOBAL STATE
+        // ===========================
+        let database = null;
+        let currentMonth = new Date();
+        let selectedDate = null;
+        let selectedTimeSlot = null;
+        let partners = [];
+        let appointments = [];
+        let availability = {};
+        let timeWindows = {
+            morning: { start: '08:00', end: '12:00', capacity: 5 },
+            afternoon: { start: '13:00', end: '17:00', capacity: 5 },
+            evening: { start: '18:00', end: '20:00', capacity: 5 }
+        };
+
+        // ===========================
+        // LANGUAGE SYSTEM
+        // ===========================
+        let currentLanguage = localStorage.getItem('language') || 'en';
+
+        const translations = {
+            en: {
+                // Navigation
+                navBooking: '🏠 Booking',
+                navPartners: '📅 Partners',
+                navAdmin: '⚙️ Admin',
+                
+                // Booking Page
+                bookingTitle: 'Garage Partner Portal',
+                bookingSubtitle: 'Premium Mobile Synthetic Oil Changes',
+                partnerName: 'Partner Name',
+                customerName: 'Customer Name',
+                customerPhone: 'Customer Phone',
+                vehicleYear: 'Vehicle Year',
+                vehicleMake: 'Vehicle Make',
+                vehicleModel: 'Vehicle Model',
+                engineSize: 'Engine Size',
+                notes: 'Notes / Additional Information',
+                selectDateTime: 'Select Date & Time',
+                bookButton: 'Book Appointment',
+                bookingSuccess: 'Appointment Booked!',
+                bookAnother: 'Book Another Appointment',
+                backToBooking: 'Back to Booking Page',
+                
+                // Placeholders
+                selectPartner: 'Select partner...',
+                selectYear: 'Select year...',
+                selectMake: 'Select make...',
+                selectModel: 'Select model...',
+                selectEngine: 'Select engine...',
+                notesPlaceholder: 'Any special instructions or information...',
+                
+                // Calendar
+                prevMonth: '← Prev',
+                nextMonth: 'Next →',
+                morning: 'Morning',
+                afternoon: 'Afternoon',
+                evening: 'Evening',
+                spots: 'spots',
+                notAvailable: 'Not available',
+                
+                // Days
+                sun: 'Sun',
+                mon: 'Mon',
+                tue: 'Tue',
+                wed: 'Wed',
+                thu: 'Thu',
+                fri: 'Fri',
+                sat: 'Sat',
+                
+                // Partners Page
+                partnersTitle: 'Partner Appointments',
+                partnersSubtitle: 'View and manage your appointments',
+                filterByPartner: 'Filter by Partner',
+                allPartners: 'All Partners',
+                noUpcoming: 'No upcoming appointments',
+                loadingAppointments: 'Loading appointments...',
+                
+                // Admin Page
+                adminTitle: 'Admin Dashboard',
+                adminSubtitle: 'Manage your Oilright booking system',
+                partnerManagement: 'Partner Management',
+                addPartner: 'Add Partner',
+                enterPartnerName: 'Enter partner name',
+                deletePartner: 'Delete',
+                timeWindowsConfig: 'Time Windows Configuration',
+                saveTimeWindows: 'Save Time Windows',
+                availabilityCalendar: 'Availability Calendar',
+                availabilityNote: 'Click dates to set which partners are available for each time window',
+                allAppointments: 'All Appointments',
+                allStatuses: 'All Statuses',
+                confirmed: 'Confirmed',
+                completed: 'Completed',
+                appointmentHistory: 'Appointment History',
+                historyNote: 'View all past appointments',
+                noAppointments: 'No appointments',
+                noHistory: 'No appointment history',
+                
+                // Appointment Details
+                time: 'Time',
+                partner: 'Partner',
+                customer: 'Customer',
+                phone: 'Phone',
+                vehicle: 'Vehicle',
+                edit: 'Edit',
+                delete: 'Delete',
+                markCompleted: 'Mark as Completed',
+                
+                // Time Window Labels
+                capacity: 'Capacity',
+                
+                // Admin Modal
+                adminAccess: 'Admin Access',
+                enterPassword: 'Enter Password',
+                passwordPlaceholder: 'Enter admin password',
+                accessAdmin: 'Access Admin',
+                cancel: 'Cancel',
+                incorrectPassword: 'Incorrect password',
+                
+                // Alerts
+                partnerAdded: 'Partner added successfully!',
+                enterPartnerAlert: 'Please enter a partner name',
+                partnerExists: 'Partner already exists',
+                deletePartnerConfirm: 'Delete partner',
+                timeWindowsSaved: 'Time windows saved successfully!',
+                selectDateTimeAlert: 'Please select a date and time slot',
+                deleteAppointmentConfirm: 'Delete this appointment?',
+                
+                // Confirmation Details
+                confirmCustomer: 'Customer',
+                confirmVehicle: 'Vehicle',
+                confirmDate: 'Date',
+                confirmTime: 'Time',
+                
+                // Loading
+                loadingMakes: 'Loading makes...',
+                loadingModels: 'Loading models...',
+                loadingEngines: 'Loading engines...',
+                errorLoadingMakes: 'Error loading makes',
+                errorLoadingModels: 'Error loading models',
+                errorLoadingEngines: 'Error loading engines'
+            },
+            fr: {
+                // Navigation
+                navBooking: '🏠 Réservation',
+                navPartners: '📅 Partenaires',
+                navAdmin: '⚙️ Admin',
+                
+                // Booking Page
+                bookingTitle: 'Portail Partenaire Garage',
+                bookingSubtitle: 'Changement d\'huile synthétique mobile',
+                partnerName: 'Nom du partenaire',
+                customerName: 'Nom du client',
+                customerPhone: 'Téléphone du client',
+                vehicleYear: 'Année du véhicule',
+                vehicleMake: 'Marque du véhicule',
+                vehicleModel: 'Modèle du véhicule',
+                engineSize: 'Taille du moteur',
+                notes: 'Notes / Informations supplémentaires',
+                selectDateTime: 'Sélectionner date et heure',
+                bookButton: 'Réserver le rendez-vous',
+                bookingSuccess: 'Rendez-vous réservé!',
+                bookAnother: 'Réserver un autre rendez-vous',
+                backToBooking: 'Retour à la page de réservation',
+                
+                // Placeholders
+                selectPartner: 'Sélectionner un partenaire...',
+                selectYear: 'Sélectionner l\'année...',
+                selectMake: 'Sélectionner la marque...',
+                selectModel: 'Sélectionner le modèle...',
+                selectEngine: 'Sélectionner le moteur...',
+                notesPlaceholder: 'Instructions ou informations spéciales...',
+                
+                // Calendar
+                prevMonth: '← Préc',
+                nextMonth: 'Suiv →',
+                morning: 'Matin',
+                afternoon: 'Après-midi',
+                evening: 'Soir',
+                spots: 'places',
+                notAvailable: 'Non disponible',
+                
+                // Days
+                sun: 'Dim',
+                mon: 'Lun',
+                tue: 'Mar',
+                wed: 'Mer',
+                thu: 'Jeu',
+                fri: 'Ven',
+                sat: 'Sam',
+                
+                // Partners Page
+                partnersTitle: 'Rendez-vous des partenaires',
+                partnersSubtitle: 'Voir et gérer vos rendez-vous',
+                filterByPartner: 'Filtrer par partenaire',
+                allPartners: 'Tous les partenaires',
+                noUpcoming: 'Aucun rendez-vous à venir',
+                loadingAppointments: 'Chargement des rendez-vous...',
+                
+                // Admin Page
+                adminTitle: 'Tableau de bord Admin',
+                adminSubtitle: 'Gérez votre système de réservation Oilright',
+                partnerManagement: 'Gestion des partenaires',
+                addPartner: 'Ajouter un partenaire',
+                enterPartnerName: 'Entrer le nom du partenaire',
+                deletePartner: 'Supprimer',
+                timeWindowsConfig: 'Configuration des plages horaires',
+                saveTimeWindows: 'Enregistrer les plages horaires',
+                availabilityCalendar: 'Calendrier de disponibilité',
+                availabilityNote: 'Cliquez sur les dates pour définir les partenaires disponibles',
+                allAppointments: 'Tous les rendez-vous',
+                allStatuses: 'Tous les statuts',
+                confirmed: 'Confirmé',
+                completed: 'Terminé',
+                appointmentHistory: 'Historique des rendez-vous',
+                historyNote: 'Voir tous les rendez-vous passés',
+                noAppointments: 'Aucun rendez-vous',
+                noHistory: 'Aucun historique',
+                
+                // Appointment Details
+                time: 'Heure',
+                partner: 'Partenaire',
+                customer: 'Client',
+                phone: 'Téléphone',
+                vehicle: 'Véhicule',
+                edit: 'Modifier',
+                delete: 'Supprimer',
+                markCompleted: 'Marquer comme terminé',
+                
+                // Time Window Labels
+                capacity: 'Capacité',
+                
+                // Admin Modal
+                adminAccess: 'Accès Admin',
+                enterPassword: 'Entrer le mot de passe',
+                passwordPlaceholder: 'Entrer le mot de passe admin',
+                accessAdmin: 'Accéder à Admin',
+                cancel: 'Annuler',
+                incorrectPassword: 'Mot de passe incorrect',
+                
+                // Alerts
+                partnerAdded: 'Partenaire ajouté avec succès!',
+                enterPartnerAlert: 'Veuillez entrer un nom de partenaire',
+                partnerExists: 'Le partenaire existe déjà',
+                deletePartnerConfirm: 'Supprimer le partenaire',
+                timeWindowsSaved: 'Plages horaires enregistrées avec succès!',
+                selectDateTimeAlert: 'Veuillez sélectionner une date et une plage horaire',
+                deleteAppointmentConfirm: 'Supprimer ce rendez-vous?',
+                
+                // Confirmation Details
+                confirmCustomer: 'Client',
+                confirmVehicle: 'Véhicule',
+                confirmDate: 'Date',
+                confirmTime: 'Heure',
+                
+                // Loading
+                loadingMakes: 'Chargement des marques...',
+                loadingModels: 'Chargement des modèles...',
+                loadingEngines: 'Chargement des moteurs...',
+                errorLoadingMakes: 'Erreur lors du chargement des marques',
+                errorLoadingModels: 'Erreur lors du chargement des modèles',
+                errorLoadingEngines: 'Erreur lors du chargement des moteurs'
+            }
+        };
+
+        function t(key) {
+            return translations[currentLanguage][key] || key;
+        }
+
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('language', lang);
+            updatePageLanguage();
+        }
+
+        function updatePageLanguage() {
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.placeholder = t(key);
+                } else if (el.tagName === 'OPTION') {
+                    el.textContent = t(key);
+                } else {
+                    el.textContent = t(key);
+                }
+            });
+            
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-lang="${currentLanguage}"]`)?.classList.add('active');
+            
+            renderCalendar();
+            renderTimeSlots();
+        }
+
+        // ===========================
+        // HELPER: GET TODAY'S DATE STRING
+        // ===========================
+        function getTodayDateString() {
+            const today = new Date();
+            return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        }
+
+        // ===========================
+        // HELPER: CREATE LOCAL DATE FROM STRING (NO TIMEZONE SHIFT)
+        // ===========================
+        function createLocalDate(dateStr) {
+            // dateStr format: "YYYY-MM-DD"
+            const [year, month, day] = dateStr.split('-').map(Number);
+            return new Date(year, month - 1, day, 0, 0, 0, 0);
+        }
+
+        // ===========================
+        // HELPER: FORMAT DATE FOR DISPLAY (NO TIMEZONE SHIFT)
+        // ===========================
+        function formatDateForDisplay(dateStr, locale = 'en-US', options = {}) {
+            const date = createLocalDate(dateStr);
+            return date.toLocaleDateString(locale, options);
+        }
+
+        // ===========================
+        // HELPER: CHECK IF DATE IS WITHIN 3-DAY BLOCK
+        // ===========================
+        function isWithinBlockedDays(dateStr) {
+            const today = createLocalDate(getTodayDateString());
+            const checkDate = createLocalDate(dateStr);
+            
+            const daysDiff = Math.floor((checkDate - today) / (1000 * 60 * 60 * 24));
+            
+            // Block today (0), tomorrow (1), day after tomorrow (2)
+            return daysDiff >= 0 && daysDiff <= 2;
+        }
+
+        window.addEventListener('load', function() {
+            const firebaseConfig = {
+                apiKey: "AIzaSyBbmCXZDyocrXlmnqB9sbaWpuZWGsCcOlk",
+                authDomain: "oilright.firebaseapp.com",
+                databaseURL: "https://oilright-default-rtdb.firebaseio.com",
+                projectId: "oilright",
+                storageBucket: "oilright.firebasestorage.app",
+                messagingSenderId: "256978778968",
+                appId: "1:256978778968:web:f35cbc6ed1cb20a0b4432d"
+            };
+
+            // FIREBASE IS MANDATORY - NO LOCALSTORAGE FALLBACK
+            try {
+                if (typeof firebase === 'undefined') {
+                    console.error("❌ CRITICAL ERROR: Firebase SDK not loaded");
+                    alert('⚠️ DATABASE CONNECTION REQUIRED\n\nFirebase could not be loaded. The app cannot function without it.\n\nPlease refresh the page or contact support.');
+                    // Disable all forms and buttons
+                    document.querySelectorAll('button, input, select, textarea').forEach(el => el.disabled = true);
+                    return;
+                }
+                
+                console.log('🔥 Initializing Firebase...');
+                firebase.initializeApp(firebaseConfig);
+                database = firebase.database();
+                console.log('✅ Firebase app initialized');
+                
+                // Test database connection
+                database.ref('.info/connected').on('value', (snap) => {
+                    if (snap.val() === true) {
+                        console.log('✅ Firebase Realtime Database CONNECTED');
+                    } else {
+                        console.warn('⚠️ Firebase Realtime Database DISCONNECTED');
+                    }
+                });
+                
+                firebase.auth().signInAnonymously()
+                    .then(() => {
+                        console.log("✅ Firebase authenticated successfully");
+                        const user = firebase.auth().currentUser;
+                        if (user) {
+                            console.log("🔑 User UID:", user.uid);
+                        }
+                        initializeApp();
+                    })
+                    .catch((error) => {
+                        console.error("❌ Firebase auth error:", error.code, error.message);
+                        alert('⚠️ AUTHENTICATION FAILED\n\n' + error.message + '\n\nPlease refresh the page.');
+                        document.querySelectorAll('button, input, select, textarea').forEach(el => el.disabled = true);
+                    });
+                
+                firebase.auth().onAuthStateChanged((user) => {
+                    if (user) {
+                        console.log("🔐 User authenticated:", user.uid);
+                    } else {
+                        console.log("🔓 User signed out");
+                    }
+                });
+            } catch (error) {
+                console.error("❌ Firebase initialization CRITICAL error:", error);
+                alert('⚠️ FIREBASE INITIALIZATION FAILED\n\n' + error.message + '\n\nThe app cannot function. Please contact support.');
+                document.querySelectorAll('button, input, select, textarea').forEach(el => el.disabled = true);
+            }
+        });
+
+        // ===========================
+        // INITIALIZATION
+        // ===========================
+        function initializeApp() {
+            loadYears();
+            renderCalendar();
+            loadPartnersFromDB();
+            loadTimeWindowsFromDB();
+            loadAvailabilityFromDB();
+            loadAppointmentsFromDB();
+            updatePageLanguage();
+            
+            if (database) {
+                database.ref('partners').on('value', (snapshot) => {
+                    partners = snapshot.val() || [];
+                    updatePartnerDropdowns();
+                });
+                
+                database.ref('appointments').on('value', (snapshot) => {
+                    const data = snapshot.val() || {};
+                    appointments = Object.keys(data).map(key => ({id: key, ...data[key]}));
+                    renderPartnerAppointments();
+                    renderAdminAppointments();
+                    renderAppointmentHistory();
+                });
+
+                database.ref('timeWindows').on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        timeWindows = data;
+                        updateTimeWindowInputs();
+                    }
+                });
+
+                database.ref('availability').on('value', (snapshot) => {
+                    availability = snapshot.val() || {};
+                    renderAvailabilityCalendar();
+                });
+            }
+        }
+
+        // ===========================
+        // DATABASE FUNCTIONS - FIREBASE ONLY
+        // ===========================
+        function saveToDatabase(path, data) {
+            if (!database) {
+                console.error('❌ Database not initialized');
+                alert('Database connection lost. Please refresh the page.');
+                return Promise.reject('No database connection');
+            }
+            return database.ref(path).set(data);
+        }
+
+        function pushToDatabase(path, data) {
+            if (!database) {
+                console.error('❌ Database not initialized');
+                alert('Database connection lost. Please refresh the page.');
+                return Promise.reject('No database connection');
+            }
+            return database.ref(path).push(data);
+        }
+
+        function loadPartnersFromDB() {
+            if (!database) {
+                console.error('❌ Database not initialized');
+                return;
+            }
+            database.ref('partners').once('value').then((snapshot) => {
+                partners = snapshot.val() || [];
+                updatePartnerDropdowns();
+            }).catch(error => {
+                console.error('❌ Error loading partners:', error);
+                alert('Failed to load partners. Please refresh the page.');
+            });
+        }
+
+        function loadTimeWindowsFromDB() {
+            if (!database) {
+                console.error('❌ Database not initialized');
+                return;
+            }
+            database.ref('timeWindows').once('value').then((snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    timeWindows = data;
+                    updateTimeWindowInputs();
+                }
+            }).catch(error => {
+                console.error('❌ Error loading time windows:', error);
+            });
+        }
+
+        function loadAvailabilityFromDB() {
+            if (!database) {
+                console.error('❌ Database not initialized');
+                return;
+            }
+            database.ref('availability').once('value').then((snapshot) => {
+                availability = snapshot.val() || {};
+                renderAvailabilityCalendar();
+            }).catch(error => {
+                console.error('❌ Error loading availability:', error);
+            });
+        }
+
+        function loadAppointmentsFromDB() {
+            if (!database) {
+                console.error('❌ Database not initialized');
+                return;
+            }
+            database.ref('appointments').once('value').then((snapshot) => {
+                const data = snapshot.val() || {};
+                appointments = Object.keys(data).map(key => ({id: key, ...data[key]}));
+                renderPartnerAppointments();
+                renderAdminAppointments();
+                renderAppointmentHistory();
+            }).catch(error => {
+                console.error('❌ Error loading appointments:', error);
+                alert('Failed to load appointments. Please refresh the page.');
+            });
+        }
+
+        // ===========================
+        // NAVIGATION
+        // ===========================
+        function switchPage(pageName) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(pageName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (pageName === 'partners') {
+                renderPartnerAppointments();
+            } else if (pageName === 'admin') {
+                renderAdminAppointments();
+                renderAppointmentHistory();
+            }
+        }
+
+        function showAdminLogin() {
+            document.getElementById('adminModal').classList.add('show');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('passwordError').textContent = '';
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('show');
+        }
+
+        function checkAdminPassword() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === '5455') {
+                closeAdminModal();
+                switchPage('admin');
+                document.querySelector('.nav-btn:nth-child(3)').classList.add('active');
+            } else {
+                document.getElementById('passwordError').textContent = t('incorrectPassword');
+            }
+        }
+
+        // ===========================
+        // VEHICLE DATABASE (NHTSA API)
+        // ===========================
+        function loadYears() {
+            const select = document.getElementById('vehicleYear');
+            const currentYear = new Date().getFullYear();
+            for (let year = currentYear; year >= 1990; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                select.appendChild(option);
+            }
+        }
+
+        async function loadMakes() {
+            const year = document.getElementById('vehicleYear').value;
+            const makeSelect = document.getElementById('vehicleMake');
+            const modelSelect = document.getElementById('vehicleModel');
+            const engineSelect = document.getElementById('engineSize');
+            
+            makeSelect.innerHTML = '<option value="">' + t('loadingMakes') + '</option>';
+            makeSelect.disabled = true;
+            modelSelect.innerHTML = '<option value="">' + t('selectModel') + '</option>';
+            modelSelect.disabled = true;
+            engineSelect.innerHTML = '<option value="">' + t('selectEngine') + '</option>';
+            engineSelect.disabled = true;
+
+            if (!year) return;
+
+            try {
+                const response = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json`);
+                const data = await response.json();
+                
+                makeSelect.innerHTML = '<option value="">' + t('selectMake') + '</option>';
+                data.Results.forEach(make => {
+                    const option = document.createElement('option');
+                    option.value = make.MakeName;
+                    option.textContent = make.MakeName;
+                    makeSelect.appendChild(option);
+                });
+                makeSelect.disabled = false;
+            } catch (error) {
+                console.error('Error loading makes:', error);
+                makeSelect.innerHTML = '<option value="">' + t('errorLoadingMakes') + '</option>';
+            }
+        }
+
+        async function loadModels() {
+            const year = document.getElementById('vehicleYear').value;
+            const make = document.getElementById('vehicleMake').value;
+            const modelSelect = document.getElementById('vehicleModel');
+            const engineSelect = document.getElementById('engineSize');
+            
+            modelSelect.innerHTML = '<option value="">' + t('loadingModels') + '</option>';
+            modelSelect.disabled = true;
+            engineSelect.innerHTML = '<option value="">' + t('selectEngine') + '</option>';
+            engineSelect.disabled = true;
+
+            if (!year || !make) return;
+
+            try {
+                const response = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeYear/make/${make}/modelyear/${year}?format=json`);
+                const data = await response.json();
+                
+                modelSelect.innerHTML = '<option value="">' + t('selectModel') + '</option>';
+                data.Results.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model.Model_Name;
+                    option.textContent = model.Model_Name;
+                    modelSelect.appendChild(option);
+                });
+                modelSelect.disabled = false;
+            } catch (error) {
+                console.error('Error loading models:', error);
+                modelSelect.innerHTML = '<option value="">' + t('errorLoadingModels') + '</option>';
+            }
+        }
+
+        async function loadEngines() {
+            const year = document.getElementById('vehicleYear').value;
+            const make = document.getElementById('vehicleMake').value;
+            const model = document.getElementById('vehicleModel').value;
+            const engineSelect = document.getElementById('engineSize');
+            
+            engineSelect.innerHTML = '<option value="">' + t('loadingEngines') + '</option>';
+            engineSelect.disabled = true;
+
+            if (!year || !make || !model) return;
+
+            try {
+                engineSelect.innerHTML = '<option value="">' + t('selectEngine') + '</option>';
+                
+                const commonEngines = [
+                    '1.5L 4-cylinder',
+                    '1.8L 4-cylinder',
+                    '2.0L 4-cylinder',
+                    '2.4L 4-cylinder',
+                    '2.5L 4-cylinder',
+                    '3.0L V6',
+                    '3.5L V6',
+                    '3.6L V6',
+                    '4.0L V6',
+                    '5.0L V8',
+                    '5.7L V8',
+                    '6.2L V8'
+                ];
+                
+                commonEngines.forEach(engine => {
+                    const option = document.createElement('option');
+                    option.value = engine;
+                    option.textContent = engine;
+                    engineSelect.appendChild(option);
+                });
+                
+                engineSelect.disabled = false;
+            } catch (error) {
+                console.error('Error loading engines:', error);
+                engineSelect.innerHTML = '<option value="">' + t('errorLoadingEngines') + '</option>';
+            }
+        }
+
+        // ===========================
+        // CALENDAR FUNCTIONS
+        // ===========================
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const monthLabel = document.getElementById('calendarMonth');
+            
+            const year = currentMonth.getFullYear();
+            const month = currentMonth.getMonth();
+            
+            monthLabel.textContent = currentMonth.toLocaleDateString(currentLanguage === 'fr' ? 'fr-FR' : 'en-US', { month: 'long', year: 'numeric' });
+            
+            grid.innerHTML = '';
+            
+            const dayKeys = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            dayKeys.forEach(key => {
+                const header = document.createElement('div');
+                header.className = 'calendar-day-header';
+                header.textContent = t(key);
+                grid.appendChild(header);
+            });
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+            
+            const todayStr = getTodayDateString();
+            
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day other-month';
+                day.textContent = daysInPrevMonth - i;
+                grid.appendChild(day);
+            }
+            
+            for (let i = 1; i <= daysInMonth; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day';
+                day.textContent = i;
+                
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                
+                // HIGHLIGHT TODAY'S DATE
+                if (dateStr === todayStr) {
+                    day.classList.add('today');
+                }
+                
+                const dateAvailability = availability[dateStr] || {};
+                const hasAvailability = dateAvailability.morning || dateAvailability.afternoon || dateAvailability.evening;
+                
+                // BLOCK TODAY + NEXT 2 DAYS
+                const isBlocked = isWithinBlockedDays(dateStr);
+                
+                if (isBlocked || !hasAvailability) {
+                    day.classList.add('disabled');
+                } else {
+                    day.onclick = () => selectDate(dateStr, day);
+                }
+                
+                if (selectedDate === dateStr) {
+                    day.classList.add('selected');
+                }
+                
+                grid.appendChild(day);
+            }
+            
+            const totalCells = grid.children.length - 7;
+            const remainingCells = 42 - totalCells;
+            for (let i = 1; i <= remainingCells; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day other-month';
+                day.textContent = i;
+                grid.appendChild(day);
+            }
+        }
+
+        function changeMonth(delta) {
+            currentMonth.setMonth(currentMonth.getMonth() + delta);
+            renderCalendar();
+            renderTimeSlots();
+        }
+
+        function selectDate(dateStr, element) {
+            selectedDate = dateStr;
+            selectedTimeSlot = null;
+            
+            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            renderTimeSlots();
+        }
+
+        function renderTimeSlots() {
+            const container = document.getElementById('timeSlots');
+            container.innerHTML = '';
+            
+            if (!selectedDate) {
+                return;
+            }
+            
+            const dateAvailability = availability[selectedDate] || {};
+            const dateAppointments = appointments.filter(apt => apt.date === selectedDate);
+            
+            const slots = [
+                { id: 'morning', name: t('morning'), time: `${timeWindows.morning.start} - ${timeWindows.morning.end}`, window: timeWindows.morning },
+                { id: 'afternoon', name: t('afternoon'), time: `${timeWindows.afternoon.start} - ${timeWindows.afternoon.end}`, window: timeWindows.afternoon },
+                { id: 'evening', name: t('evening'), time: `${timeWindows.evening.start} - ${timeWindows.evening.end}`, window: timeWindows.evening }
+            ];
+            
+            slots.forEach(slot => {
+                const slotDiv = document.createElement('div');
+                slotDiv.className = 'time-slot';
+                
+                const availablePartners = dateAvailability[slot.id] || [];
+                const isAvailable = Array.isArray(availablePartners) && availablePartners.length > 0;
+                
+                const bookedCount = dateAppointments.filter(apt => apt.timeSlot === slot.id).length;
+                const remainingSpots = slot.window.capacity - bookedCount;
+                
+                if (!isAvailable || remainingSpots <= 0) {
+                    slotDiv.classList.add('disabled');
+                }
+                
+                if (selectedTimeSlot === slot.id) {
+                    slotDiv.classList.add('selected');
+                }
+                
+                slotDiv.innerHTML = `
+                    <div>
+                        <strong>${slot.name}</strong><br>
+                        <small>${slot.time}</small>
+                    </div>
+                    <div class="time-slot-capacity">
+                        ${isAvailable ? `${remainingSpots}/${slot.window.capacity} ${t('spots')}` : t('notAvailable')}
+                    </div>
+                `;
+                
+                if (isAvailable && remainingSpots > 0) {
+                    slotDiv.onclick = () => selectTimeSlot(slot.id, slotDiv);
+                }
+                
+                container.appendChild(slotDiv);
+            });
+        }
+
+        function selectTimeSlot(slotId, element) {
+            selectedTimeSlot = slotId;
+            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        // ===========================
+        // BOOKING FORM
+        // ===========================
+        document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!selectedDate || !selectedTimeSlot) {
+                alert(t('selectDateTimeAlert'));
+                return;
+            }
+            
+            const appointment = {
+                partnerName: document.getElementById('partnerName').value,
+                customerName: document.getElementById('customerName').value,
+                customerPhone: document.getElementById('customerPhone').value,
+                vehicle: {
+                    year: document.getElementById('vehicleYear').value,
+                    make: document.getElementById('vehicleMake').value,
+                    model: document.getElementById('vehicleModel').value,
+                    engine: document.getElementById('engineSize').value
+                },
+                notes: document.getElementById('notes').value,
+                date: selectedDate,
+                timeSlot: selectedTimeSlot,
+                status: 'confirmed', // AUTO-ASSIGN CONFIRMED STATUS
+                createdAt: new Date().toISOString()
+            };
+            
+            try {
+                await pushToDatabase('appointments', appointment);
+                
+                const timeSlotName = t(selectedTimeSlot);
+                const dateFormatted = formatDateForDisplay(selectedDate, currentLanguage === 'fr' ? 'fr-FR' : 'en-US');
+                
+                document.getElementById('confirmationDetails').innerHTML = `
+                    <strong>${t('confirmCustomer')}:</strong> ${appointment.customerName}<br>
+                    <strong>${t('confirmVehicle')}:</strong> ${appointment.vehicle.year} ${appointment.vehicle.make} ${appointment.vehicle.model}<br>
+                    <strong>${t('confirmDate')}:</strong> ${dateFormatted}<br>
+                    <strong>${t('confirmTime')}:</strong> ${timeSlotName}
+                `;
+                
+                document.getElementById('bookingForm').style.display = 'none';
+                document.getElementById('bookingSuccess').classList.add('show');
+                
+                loadAppointmentsFromDB();
+            } catch (error) {
+                console.error('Error booking appointment:', error);
+                alert('Error booking appointment. Please try again.');
+            }
+        });
+
+        function resetBookingForm() {
+            document.getElementById('bookingForm').reset();
+            document.getElementById('bookingForm').style.display = 'block';
+            document.getElementById('bookingSuccess').classList.remove('show');
+            selectedDate = null;
+            selectedTimeSlot = null;
+            renderCalendar();
+            renderTimeSlots();
+            document.getElementById('vehicleMake').disabled = true;
+            document.getElementById('vehicleModel').disabled = true;
+            document.getElementById('engineSize').disabled = true;
+        }
+
+        // ===========================
+        // PARTNERS MANAGEMENT
+        // ===========================
+        async function addPartner() {
+            const name = document.getElementById('newPartnerName').value.trim();
+            if (!name) {
+                alert(t('enterPartnerAlert'));
+                return;
+            }
+            
+            if (partners.includes(name)) {
+                alert(t('partnerExists'));
+                return;
+            }
+            
+            partners.push(name);
+            await saveToDatabase('partners', partners);
+            document.getElementById('newPartnerName').value = '';
+            updatePartnerDropdowns();
+            renderPartnersList();
+            alert(t('partnerAdded'));
+        }
+
+        function deletePartner(name) {
+            if (confirm(`${t('deletePartnerConfirm')} "${name}"?`)) {
+                partners = partners.filter(p => p !== name);
+                saveToDatabase('partners', partners);
+                updatePartnerDropdowns();
+                renderPartnersList();
+            }
+        }
+
+        function updatePartnerDropdowns() {
+            const selects = [
+                document.getElementById('partnerName'),
+                document.getElementById('partnerFilter')
+            ];
+            
+            selects.forEach(select => {
+                const currentValue = select.value;
+                const firstOption = select.options[0].value === '' ? select.options[0].outerHTML : '';
+                
+                select.innerHTML = firstOption;
+                
+                partners.forEach(partner => {
+                    const option = document.createElement('option');
+                    option.value = partner;
+                    option.textContent = partner;
+                    select.appendChild(option);
+                });
+                
+                if (currentValue && partners.includes(currentValue)) {
+                    select.value = currentValue;
+                }
+            });
+            
+            renderPartnersList();
+        }
+
+        function renderPartnersList() {
+            const list = document.getElementById('partnersList');
+            list.innerHTML = '';
+            
+            partners.forEach(partner => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${partner}</span>
+                    <button class="delete-btn" onclick="deletePartner('${partner}')">${t('deletePartner')}</button>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        // ===========================
+        // TIME WINDOWS
+        // ===========================
+        function saveTimeWindows() {
+            timeWindows = {
+                morning: {
+                    start: document.getElementById('morningStart').value,
+                    end: document.getElementById('morningEnd').value,
+                    capacity: parseInt(document.getElementById('morningCapacity').value)
+                },
+                afternoon: {
+                    start: document.getElementById('afternoonStart').value,
+                    end: document.getElementById('afternoonEnd').value,
+                    capacity: parseInt(document.getElementById('afternoonCapacity').value)
+                },
+                evening: {
+                    start: document.getElementById('eveningStart').value,
+                    end: document.getElementById('eveningEnd').value,
+                    capacity: parseInt(document.getElementById('eveningCapacity').value)
+                }
+            };
+            
+            saveToDatabase('timeWindows', timeWindows);
+            alert(t('timeWindowsSaved'));
+            renderTimeSlots();
+        }
+
+        function updateTimeWindowInputs() {
+            document.getElementById('morningStart').value = timeWindows.morning.start;
+            document.getElementById('morningEnd').value = timeWindows.morning.end;
+            document.getElementById('morningCapacity').value = timeWindows.morning.capacity;
+            
+            document.getElementById('afternoonStart').value = timeWindows.afternoon.start;
+            document.getElementById('afternoonEnd').value = timeWindows.afternoon.end;
+            document.getElementById('afternoonCapacity').value = timeWindows.afternoon.capacity;
+            
+            document.getElementById('eveningStart').value = timeWindows.evening.start;
+            document.getElementById('eveningEnd').value = timeWindows.evening.end;
+            document.getElementById('eveningCapacity').value = timeWindows.evening.capacity;
+        }
+
+        // ===========================
+        // AVAILABILITY CALENDAR
+        // ===========================
+        function renderAvailabilityCalendar() {
+            const container = document.getElementById('availabilityCalendar');
+            if (!container) return;
+            
+            container.innerHTML = '<div class="calendar-container"><div class="calendar-header"><button type="button" onclick="changeAvailabilityMonth(-1)">← ' + t('prevMonth').replace('← ', '') + '</button><div class="calendar-month" id="availabilityCalendarMonth"></div><button type="button" onclick="changeAvailabilityMonth(1)">' + t('nextMonth').replace(' →', '') + ' →</button></div><div class="calendar-grid" id="availabilityCalendarGrid"></div></div>';
+            
+            const availMonth = window.availabilityCurrentMonth || new Date();
+            const year = availMonth.getFullYear();
+            const month = availMonth.getMonth();
+            
+            document.getElementById('availabilityCalendarMonth').textContent = availMonth.toLocaleDateString(currentLanguage === 'fr' ? 'fr-FR' : 'en-US', { month: 'long', year: 'numeric' });
+            
+            const grid = document.getElementById('availabilityCalendarGrid');
+            
+            const dayKeys = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            dayKeys.forEach(key => {
+                const header = document.createElement('div');
+                header.className = 'calendar-day-header';
+                header.textContent = t(key);
+                grid.appendChild(header);
+            });
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+            
+            const todayStr = getTodayDateString();
+            
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day other-month';
+                day.textContent = daysInPrevMonth - i;
+                grid.appendChild(day);
+            }
+            
+            for (let i = 1; i <= daysInMonth; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day';
+                day.textContent = i;
+                
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                
+                // HIGHLIGHT TODAY'S DATE
+                if (dateStr === todayStr) {
+                    day.classList.add('today');
+                }
+                
+                const dateAvail = availability[dateStr] || {};
+                
+                if (dateAvail.morning || dateAvail.afternoon || dateAvail.evening) {
+                    day.style.background = 'rgba(249, 168, 37, 0.2)';
+                    day.style.borderColor = '#F9A825';
+                }
+                
+                day.onclick = () => openAvailabilityModal(dateStr);
+                
+                grid.appendChild(day);
+            }
+            
+            const totalCells = grid.children.length - 7;
+            const remainingCells = 42 - totalCells;
+            for (let i = 1; i <= remainingCells; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day other-month';
+                day.textContent = i;
+                grid.appendChild(day);
+            }
+        }
+        
+        window.availabilityCurrentMonth = new Date();
+        
+        function changeAvailabilityMonth(delta) {
+            window.availabilityCurrentMonth = window.availabilityCurrentMonth || new Date();
+            window.availabilityCurrentMonth.setMonth(window.availabilityCurrentMonth.getMonth() + delta);
+            renderAvailabilityCalendar();
+        }
+        
+        let currentAvailabilityDate = null;
+        
+        function openAvailabilityModal(dateStr) {
+            currentAvailabilityDate = dateStr;
+            const modal = document.getElementById('availabilityModal');
+            const title = document.getElementById('availabilityModalTitle');
+            const body = document.getElementById('availabilityModalBody');
+            
+            const dateFormatted = formatDateForDisplay(dateStr, currentLanguage === 'fr' ? 'fr-FR' : 'en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+            title.textContent = `Availability - ${dateFormatted}`;
+            
+            const dateAvail = availability[dateStr] || {};
+            
+            let html = '';
+            
+            html += '<div class="time-window-section">';
+            html += '<h3>' + t('morning') + ' (' + timeWindows.morning.start + ' - ' + timeWindows.morning.end + ')</h3>';
+            html += '<div class="partner-checkboxes" id="morning-partners">';
+            partners.forEach((partner, idx) => {
+                const checked = (dateAvail.morning || []).includes(partner) ? 'checked' : '';
+                html += `<div class="partner-checkbox-item"><input type="checkbox" id="morning-${idx}" value="${partner}" ${checked}><label for="morning-${idx}">${partner}</label></div>`;
+            });
+            html += '</div></div>';
+            
+            html += '<div class="time-window-section">';
+            html += '<h3>' + t('afternoon') + ' (' + timeWindows.afternoon.start + ' - ' + timeWindows.afternoon.end + ')</h3>';
+            html += '<div class="partner-checkboxes" id="afternoon-partners">';
+            partners.forEach((partner, idx) => {
+                const checked = (dateAvail.afternoon || []).includes(partner) ? 'checked' : '';
+                html += `<div class="partner-checkbox-item"><input type="checkbox" id="afternoon-${idx}" value="${partner}" ${checked}><label for="afternoon-${idx}">${partner}</label></div>`;
+            });
+            html += '</div></div>';
+            
+            html += '<div class="time-window-section">';
+            html += '<h3>' + t('evening') + ' (' + timeWindows.evening.start + ' - ' + timeWindows.evening.end + ')</h3>';
+            html += '<div class="partner-checkboxes" id="evening-partners">';
+            partners.forEach((partner, idx) => {
+                const checked = (dateAvail.evening || []).includes(partner) ? 'checked' : '';
+                html += `<div class="partner-checkbox-item"><input type="checkbox" id="evening-${idx}" value="${partner}" ${checked}><label for="evening-${idx}">${partner}</label></div>`;
+            });
+            html += '</div></div>';
+            
+            body.innerHTML = html;
+            modal.classList.add('show');
+        }
+        
+        function closeAvailabilityModal() {
+            document.getElementById('availabilityModal').classList.remove('show');
+        }
+        
+        function saveAvailabilityFromModal() {
+            if (!currentAvailabilityDate) return;
+            
+            const dateAvail = {};
+            
+            const morningSelected = Array.from(document.querySelectorAll('#morning-partners input:checked')).map(cb => cb.value);
+            const afternoonSelected = Array.from(document.querySelectorAll('#afternoon-partners input:checked')).map(cb => cb.value);
+            const eveningSelected = Array.from(document.querySelectorAll('#evening-partners input:checked')).map(cb => cb.value);
+            
+            if (morningSelected.length > 0) dateAvail.morning = morningSelected;
+            if (afternoonSelected.length > 0) dateAvail.afternoon = afternoonSelected;
+            if (eveningSelected.length > 0) dateAvail.evening = eveningSelected;
+            
+            availability[currentAvailabilityDate] = dateAvail;
+            
+            saveToDatabase('availability', availability);
+            closeAvailabilityModal();
+            renderAvailabilityCalendar();
+            renderCalendar();
+        }
+
+        // ===========================
+        // PARTNERS PAGE
+        // ===========================
+        window.partnerCurrentMonth = new Date();
+        let selectedPartnerForView = null;
+        
+        function changePartnerMonth(delta) {
+            window.partnerCurrentMonth.setMonth(window.partnerCurrentMonth.getMonth() + delta);
+            renderPartnerCalendar();
+        }
+        
+        function filterAppointments() {
+            const filter = document.getElementById('partnerFilter').value;
+            selectedPartnerForView = filter;
+            
+            if (!filter) {
+                document.getElementById('partnerCalendarView').style.display = 'none';
+                document.getElementById('partnerEmptyState').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('partnerEmptyState').style.display = 'none';
+            document.getElementById('partnerCalendarView').style.display = 'block';
+            window.partnerCurrentMonth = new Date();
+            renderPartnerCalendar();
+        }
+        
+        function renderPartnerCalendar() {
+            if (!selectedPartnerForView) return;
+            
+            const month = window.partnerCurrentMonth;
+            const year = month.getFullYear();
+            const monthNum = month.getMonth();
+            
+            document.getElementById('partnerCalendarMonth').textContent = month.toLocaleDateString(currentLanguage === 'fr' ? 'fr-FR' : 'en-US', { month: 'long', year: 'numeric' });
+            
+            const grid = document.getElementById('partnerCalendarGrid');
+            grid.innerHTML = '';
+            
+            const dayKeys = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            dayKeys.forEach(key => {
+                const header = document.createElement('div');
+                header.className = 'calendar-day-header';
+                header.textContent = t(key);
+                grid.appendChild(header);
+            });
+            
+            const firstDay = new Date(year, monthNum, 1).getDay();
+            const daysInMonth = new Date(year, monthNum + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, monthNum, 0).getDate();
+            
+            const todayStr = getTodayDateString();
+            
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day other-month';
+                day.textContent = daysInPrevMonth - i;
+                grid.appendChild(day);
+            }
+            
+            for (let i = 1; i <= daysInMonth; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day';
+                day.textContent = i;
+                
+                const dateStr = `${year}-${String(monthNum + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                
+                // HIGHLIGHT TODAY'S DATE
+                if (dateStr === todayStr) {
+                    day.classList.add('today');
+                }
+                
+                const dayAppointments = appointments.filter(apt => 
+                    apt.date === dateStr && apt.partnerName === selectedPartnerForView
+                );
+                
+                if (dayAppointments.length > 0) {
+                    day.classList.add('has-appointments');
+                    day.style.cursor = 'pointer';
+                    day.onclick = () => showPartnerDayAppointments(dateStr, dayAppointments);
+                } else {
+                    day.classList.add('no-appointments');
+                    day.style.cursor = 'default';
+                }
+                
+                grid.appendChild(day);
+            }
+            
+            const totalCells = grid.children.length - 7;
+            const remainingCells = 42 - totalCells;
+            for (let i = 1; i <= remainingCells; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day other-month';
+                day.textContent = i;
+                grid.appendChild(day);
+            }
+            
+            document.getElementById('partnerAppointmentsList').innerHTML = `<p style="text-align: center; color: #999; padding: 40px;">Click a date to view appointments</p>`;
+        }
+        
+        function showPartnerDayAppointments(dateStr, dayAppointments) {
+            const container = document.getElementById('partnerAppointmentsList');
+            const dateFormatted = formatDateForDisplay(dateStr, currentLanguage === 'fr' ? 'fr-FR' : 'en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+            
+            let html = `<h3 style="color: #F9A825; margin-bottom: 20px;">${dateFormatted}</h3>`;
+            
+            container.innerHTML = html;
+            dayAppointments.sort((a, b) => {
+                const order = { morning: 1, afternoon: 2, evening: 3 };
+                return order[a.timeSlot] - order[b.timeSlot];
+            });
+            dayAppointments.forEach(apt => {
+                container.appendChild(createAppointmentCard(apt, true));
+            });
+        }
+        
+        function renderPartnerAppointments() {
+            if (selectedPartnerForView) {
+                renderPartnerCalendar();
+            }
+        }
+
+        // ===========================
+        // ADMIN APPOINTMENTS
+        // ===========================
+        window.adminCurrentMonth = new Date();
+        
+        function changeAdminMonth(delta) {
+            window.adminCurrentMonth.setMonth(window.adminCurrentMonth.getMonth() + delta);
+            renderAdminAppointments();
+        }
+
+        function renderAdminAppointments() {
+            const month = window.adminCurrentMonth;
+            const year = month.getFullYear();
+            const monthNum = month.getMonth();
+            
+            document.getElementById('adminCalendarMonth').textContent = month.toLocaleDateString(currentLanguage === 'fr' ? 'fr-FR' : 'en-US', { month: 'long', year: 'numeric' });
+            
+            const grid = document.getElementById('adminCalendarGrid');
+            grid.innerHTML = '';
+            
+            const dayKeys = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            dayKeys.forEach(key => {
+                const header = document.createElement('div');
+                header.className = 'calendar-day-header';
+                header.textContent = t(key);
+                grid.appendChild(header);
+            });
+            
+            const firstDay = new Date(year, monthNum, 1).getDay();
+            const daysInMonth = new Date(year, monthNum + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, monthNum, 0).getDate();
+            
+            const todayStr = getTodayDateString();
+            
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day other-month';
+                day.textContent = daysInPrevMonth - i;
+                grid.appendChild(day);
+            }
+            
+            for (let i = 1; i <= daysInMonth; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day';
+                day.textContent = i;
+                
+                const dateStr = `${year}-${String(monthNum + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                
+                // HIGHLIGHT TODAY'S DATE
+                if (dateStr === todayStr) {
+                    day.classList.add('today');
+                }
+                
+                const dayAppointments = appointments.filter(apt => apt.date === dateStr);
+                
+                if (dayAppointments.length > 0) {
+                    day.style.cursor = 'pointer';
+                    day.onclick = () => showAdminDayAppointments(dateStr, dayAppointments);
+                } else {
+                    day.style.cursor = 'default';
+                    day.classList.add('disabled');
+                    day.style.opacity = '0.5';
+                }
+                
+                grid.appendChild(day);
+            }
+            
+            const totalCells = grid.children.length - 7;
+            const remainingCells = 42 - totalCells;
+            for (let i = 1; i <= remainingCells; i++) {
+                const day = document.createElement('div');
+                day.className = 'calendar-day other-month';
+                day.textContent = i;
+                grid.appendChild(day);
+            }
+            
+            const container = document.getElementById('adminAppointments');
+            container.innerHTML = `<p style="text-align: center; color: #999; padding: 40px;">Click a date with appointments to view details</p>`;
+        }
+        
+        function showAdminDayAppointments(dateStr, dayAppointments) {
+            const container = document.getElementById('adminAppointments');
+            const dateFormatted = formatDateForDisplay(dateStr, currentLanguage === 'fr' ? 'fr-FR' : 'en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+            
+            let html = `<h3 style="color: #F9A825; margin-bottom: 20px;">${dateFormatted}</h3>`;
+            
+            container.innerHTML = html;
+            dayAppointments.sort((a, b) => {
+                const order = { morning: 1, afternoon: 2, evening: 3 };
+                return order[a.timeSlot] - order[b.timeSlot];
+            });
+            dayAppointments.forEach(apt => {
+                container.appendChild(createAppointmentCard(apt, false));
+            });
+        }
+
+        function renderAppointmentHistory() {
+            const container = document.getElementById('appointmentHistory');
+            
+            const completed = appointments.filter(apt => apt.status === 'completed');
+            completed.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            if (completed.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">' + t('noHistory') + '</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            completed.forEach(apt => {
+                const card = createAppointmentCard(apt, false);
+                container.appendChild(card);
+            });
+        }
+
+        // ===========================
+        // APPOINTMENT CARD CREATION
+        // ===========================
+        function createAppointmentCard(apt, isPartnerView) {
+            const card = document.createElement('div');
+            card.className = 'appointment-card';
+            
+            const timeSlotName = t(apt.timeSlot);
+            const timeSlot = timeWindows[apt.timeSlot];
+            const dateFormatted = formatDateForDisplay(apt.date, currentLanguage === 'fr' ? 'fr-FR' : 'en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+            
+            card.innerHTML = `
+                <div class="appointment-header">
+                    <div class="appointment-date">
+                        ${dateFormatted}
+                    </div>
+                    <div class="status-badge status-${apt.status}">${apt.status.toUpperCase()}</div>
+                </div>
+                <div class="appointment-details">
+                    <div class="appointment-detail">
+                        <span class="detail-label">${t('time')}:</span>
+                        <span class="detail-value">${timeSlotName} (${timeSlot.start} - ${timeSlot.end})</span>
+                    </div>
+                    <div class="appointment-detail">
+                        <span class="detail-label">${t('partner')}:</span>
+                        <span class="detail-value">${apt.partnerName}</span>
+                    </div>
+                    <div class="appointment-detail">
+                        <span class="detail-label">${t('customer')}:</span>
+                        <span class="detail-value">${apt.customerName}</span>
+                    </div>
+                    <div class="appointment-detail">
+                        <span class="detail-label">${t('phone')}:</span>
+                        <span class="detail-value">${apt.customerPhone}</span>
+                    </div>
+                    <div class="appointment-detail">
+                        <span class="detail-label">${t('vehicle')}:</span>
+                        <span class="detail-value">${apt.vehicle.year} ${apt.vehicle.make} ${apt.vehicle.model} - ${apt.vehicle.engine}</span>
+                    </div>
+                    ${apt.notes ? `
+                    <div class="appointment-detail">
+                        <span class="detail-label">${t('notes')}:</span>
+                        <span class="detail-value">${apt.notes}</span>
+                    </div>
+                    ` : ''}
+                </div>
+                <div class="appointment-actions">
+                    ${isPartnerView ? 
+                        `<button class="btn btn-small" onclick="openEditAppointmentModalPartner('${apt.id}')">${t('edit')}</button>` :
+                        `<button class="btn btn-small" onclick="openEditAppointmentModal('${apt.id}')">${t('edit')}</button>`
+                    }
+                    <button class="btn btn-small btn-secondary" onclick="deleteAppointment('${apt.id}')">${t('delete')}</button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // ===========================
+        // EDIT APPOINTMENT - PARTNER VERSION (NO STATUS/PARTNER EDIT)
+        // ===========================
+        let currentEditingAppointmentIdPartner = null;
+
+        function openEditAppointmentModalPartner(id) {
+            const apt = appointments.find(a => a.id === id);
+            if (!apt) return;
+            
+            currentEditingAppointmentIdPartner = id;
+            
+            const yearSelect = document.getElementById('editVehicleYearPartner');
+            yearSelect.innerHTML = '<option value="">' + t('selectYear') + '</option>';
+            const currentYear = new Date().getFullYear();
+            for (let year = currentYear; year >= 1990; year--) {
+                yearSelect.innerHTML += `<option value="${year}">${year}</option>`;
+            }
+            yearSelect.value = apt.vehicle.year;
+            
+            document.getElementById('editCustomerNamePartner').value = apt.customerName;
+            document.getElementById('editCustomerPhonePartner').value = apt.customerPhone;
+            document.getElementById('editDatePartner').value = apt.date;
+            document.getElementById('editTimeSlotPartner').value = apt.timeSlot;
+            document.getElementById('editNotesPartner').value = apt.notes || '';
+            
+            // DISPLAY STATUS AS READ-ONLY
+            const statusBadge = `<div class="status-badge status-${apt.status}">${apt.status.toUpperCase()}</div>`;
+            document.getElementById('editStatusDisplayPartner').innerHTML = statusBadge;
+            
+            loadMakesForEditPartner().then(() => {
+                document.getElementById('editVehicleMakePartner').value = apt.vehicle.make;
+                return loadModelsForEditPartner();
+            }).then(() => {
+                document.getElementById('editVehicleModelPartner').value = apt.vehicle.model;
+                return loadEnginesForEditPartner();
+            }).then(() => {
+                document.getElementById('editEngineSizePartner').value = apt.vehicle.engine;
+            });
+            
+            document.getElementById('editAppointmentModalPartner').classList.add('show');
+        }
+
+        function closeEditAppointmentModalPartner() {
+            document.getElementById('editAppointmentModalPartner').classList.remove('show');
+            currentEditingAppointmentIdPartner = null;
+        }
+
+        async function loadMakesForEditPartner() {
+            const year = document.getElementById('editVehicleYearPartner').value;
+            const makeSelect = document.getElementById('editVehicleMakePartner');
+            const modelSelect = document.getElementById('editVehicleModelPartner');
+            const engineSelect = document.getElementById('editEngineSizePartner');
+            
+            makeSelect.innerHTML = '<option value="">' + t('loadingMakes') + '</option>';
+            makeSelect.disabled = true;
+            modelSelect.innerHTML = '<option value="">' + t('selectModel') + '</option>';
+            modelSelect.disabled = true;
+            engineSelect.innerHTML = '<option value="">' + t('selectEngine') + '</option>';
+            engineSelect.disabled = true;
+
+            if (!year) return;
+
+            try {
+                const response = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json`);
+                const data = await response.json();
+                
+                makeSelect.innerHTML = '<option value="">' + t('selectMake') + '</option>';
+                data.Results.forEach(make => {
+                    makeSelect.innerHTML += `<option value="${make.MakeName}">${make.MakeName}</option>`;
+                });
+                makeSelect.disabled = false;
+            } catch (error) {
+                console.error('Error loading makes:', error);
+                makeSelect.innerHTML = '<option value="">' + t('errorLoadingMakes') + '</option>';
+            }
+        }
+
+        async function loadModelsForEditPartner() {
+            const year = document.getElementById('editVehicleYearPartner').value;
+            const make = document.getElementById('editVehicleMakePartner').value;
+            const modelSelect = document.getElementById('editVehicleModelPartner');
+            const engineSelect = document.getElementById('editEngineSizePartner');
+            
+            modelSelect.innerHTML = '<option value="">' + t('loadingModels') + '</option>';
+            modelSelect.disabled = true;
+            engineSelect.innerHTML = '<option value="">' + t('selectEngine') + '</option>';
+            engineSelect.disabled = true;
+
+            if (!year || !make) return;
+
+            try {
+                const response = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeYear/make/${make}/modelyear/${year}?format=json`);
+                const data = await response.json();
+                
+                modelSelect.innerHTML = '<option value="">' + t('selectModel') + '</option>';
+                data.Results.forEach(model => {
+                    modelSelect.innerHTML += `<option value="${model.Model_Name}">${model.Model_Name}</option>`;
+                });
+                modelSelect.disabled = false;
+            } catch (error) {
+                console.error('Error loading models:', error);
+                modelSelect.innerHTML = '<option value="">' + t('errorLoadingModels') + '</option>';
+            }
+        }
+
+        async function loadEnginesForEditPartner() {
+            const engineSelect = document.getElementById('editEngineSizePartner');
+            
+            engineSelect.innerHTML = '<option value="">' + t('selectEngine') + '</option>';
+            
+            const commonEngines = [
+                '1.5L 4-cylinder',
+                '1.8L 4-cylinder',
+                '2.0L 4-cylinder',
+                '2.4L 4-cylinder',
+                '2.5L 4-cylinder',
+                '3.0L V6',
+                '3.5L V6',
+                '3.6L V6',
+                '4.0L V6',
+                '5.0L V8',
+                '5.7L V8',
+                '6.2L V8'
+            ];
+            
+            commonEngines.forEach(engine => {
+                engineSelect.innerHTML += `<option value="${engine}">${engine}</option>`;
+            });
+            
+            engineSelect.disabled = false;
+        }
+
+        async function saveEditedAppointmentPartner() {
+            if (!currentEditingAppointmentIdPartner) return;
+            if (!database) {
+                alert('Database connection lost. Please refresh the page.');
+                return;
+            }
+            
+            const originalApt = appointments.find(a => a.id === currentEditingAppointmentIdPartner);
+            
+            const updatedAppointment = {
+                partnerName: originalApt.partnerName,
+                customerName: document.getElementById('editCustomerNamePartner').value,
+                customerPhone: document.getElementById('editCustomerPhonePartner').value,
+                vehicle: {
+                    year: document.getElementById('editVehicleYearPartner').value,
+                    make: document.getElementById('editVehicleMakePartner').value,
+                    model: document.getElementById('editVehicleModelPartner').value,
+                    engine: document.getElementById('editEngineSizePartner').value
+                },
+                date: document.getElementById('editDatePartner').value,
+                timeSlot: document.getElementById('editTimeSlotPartner').value,
+                notes: document.getElementById('editNotesPartner').value,
+                status: originalApt.status,
+                createdAt: originalApt.createdAt
+            };
+            
+            try {
+                await database.ref(`appointments/${currentEditingAppointmentIdPartner}`).set(updatedAppointment);
+                closeEditAppointmentModalPartner();
+                loadAppointmentsFromDB();
+            } catch (error) {
+                console.error('Error saving appointment:', error);
+                alert('Failed to save changes. Please try again.');
+            }
+        }
+
+        // ===========================
+        // EDIT APPOINTMENT - ADMIN VERSION (WITH STATUS/PARTNER EDIT)
+        // ===========================
+        let currentEditingAppointmentId = null;
+
+        function openEditAppointmentModal(id) {
+            const apt = appointments.find(a => a.id === id);
+            if (!apt) return;
+            
+            currentEditingAppointmentId = id;
+            
+            const partnerSelect = document.getElementById('editPartnerName');
+            partnerSelect.innerHTML = partners.map(p => `<option value="${p}">${p}</option>`).join('');
+            partnerSelect.value = apt.partnerName;
+            
+            const yearSelect = document.getElementById('editVehicleYear');
+            yearSelect.innerHTML = '<option value="">' + t('selectYear') + '</option>';
+            const currentYear = new Date().getFullYear();
+            for (let year = currentYear; year >= 1990; year--) {
+                yearSelect.innerHTML += `<option value="${year}">${year}</option>`;
+            }
+            yearSelect.value = apt.vehicle.year;
+            
+            document.getElementById('editCustomerName').value = apt.customerName;
+            document.getElementById('editCustomerPhone').value = apt.customerPhone;
+            document.getElementById('editDate').value = apt.date;
+            document.getElementById('editTimeSlot').value = apt.timeSlot;
+            document.getElementById('editNotes').value = apt.notes || '';
+            document.getElementById('editStatus').value = apt.status;
+            
+            loadMakesForEdit().then(() => {
+                document.getElementById('editVehicleMake').value = apt.vehicle.make;
+                return loadModelsForEdit();
+            }).then(() => {
+                document.getElementById('editVehicleModel').value = apt.vehicle.model;
+                return loadEnginesForEdit();
+            }).then(() => {
+                document.getElementById('editEngineSize').value = apt.vehicle.engine;
+            });
+            
+            document.getElementById('editAppointmentModal').classList.add('show');
+        }
+
+        function closeEditAppointmentModal() {
+            document.getElementById('editAppointmentModal').classList.remove('show');
+            currentEditingAppointmentId = null;
+        }
+
+        async function loadMakesForEdit() {
+            const year = document.getElementById('editVehicleYear').value;
+            const makeSelect = document.getElementById('editVehicleMake');
+            const modelSelect = document.getElementById('editVehicleModel');
+            const engineSelect = document.getElementById('editEngineSize');
+            
+            makeSelect.innerHTML = '<option value="">' + t('loadingMakes') + '</option>';
+            makeSelect.disabled = true;
+            modelSelect.innerHTML = '<option value="">' + t('selectModel') + '</option>';
+            modelSelect.disabled = true;
+            engineSelect.innerHTML = '<option value="">' + t('selectEngine') + '</option>';
+            engineSelect.disabled = true;
+
+            if (!year) return;
+
+            try {
+                const response = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/car?format=json`);
+                const data = await response.json();
+                
+                makeSelect.innerHTML = '<option value="">' + t('selectMake') + '</option>';
+                data.Results.forEach(make => {
+                    makeSelect.innerHTML += `<option value="${make.MakeName}">${make.MakeName}</option>`;
+                });
+                makeSelect.disabled = false;
+            } catch (error) {
+                console.error('Error loading makes:', error);
+                makeSelect.innerHTML = '<option value="">' + t('errorLoadingMakes') + '</option>';
+            }
+        }
+
+        async function loadModelsForEdit() {
+            const year = document.getElementById('editVehicleYear').value;
+            const make = document.getElementById('editVehicleMake').value;
+            const modelSelect = document.getElementById('editVehicleModel');
+            const engineSelect = document.getElementById('editEngineSize');
+            
+            modelSelect.innerHTML = '<option value="">' + t('loadingModels') + '</option>';
+            modelSelect.disabled = true;
+            engineSelect.innerHTML = '<option value="">' + t('selectEngine') + '</option>';
+            engineSelect.disabled = true;
+
+            if (!year || !make) return;
+
+            try {
+                const response = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeYear/make/${make}/modelyear/${year}?format=json`);
+                const data = await response.json();
+                
+                modelSelect.innerHTML = '<option value="">' + t('selectModel') + '</option>';
+                data.Results.forEach(model => {
+                    modelSelect.innerHTML += `<option value="${model.Model_Name}">${model.Model_Name}</option>`;
+                });
+                modelSelect.disabled = false;
+            } catch (error) {
+                console.error('Error loading models:', error);
+                modelSelect.innerHTML = '<option value="">' + t('errorLoadingModels') + '</option>';
+            }
+        }
+
+        async function loadEnginesForEdit() {
+            const engineSelect = document.getElementById('editEngineSize');
+            
+            engineSelect.innerHTML = '<option value="">' + t('selectEngine') + '</option>';
+            
+            const commonEngines = [
+                '1.5L 4-cylinder',
+                '1.8L 4-cylinder',
+                '2.0L 4-cylinder',
+                '2.4L 4-cylinder',
+                '2.5L 4-cylinder',
+                '3.0L V6',
+                '3.5L V6',
+                '3.6L V6',
+                '4.0L V6',
+                '5.0L V8',
+                '5.7L V8',
+                '6.2L V8'
+            ];
+            
+            commonEngines.forEach(engine => {
+                engineSelect.innerHTML += `<option value="${engine}">${engine}</option>`;
+            });
+            
+            engineSelect.disabled = false;
+        }
+
+        async function saveEditedAppointment() {
+            if (!currentEditingAppointmentId) return;
+            if (!database) {
+                alert('Database connection lost. Please refresh the page.');
+                return;
+            }
+            
+            const updatedAppointment = {
+                partnerName: document.getElementById('editPartnerName').value,
+                customerName: document.getElementById('editCustomerName').value,
+                customerPhone: document.getElementById('editCustomerPhone').value,
+                vehicle: {
+                    year: document.getElementById('editVehicleYear').value,
+                    make: document.getElementById('editVehicleMake').value,
+                    model: document.getElementById('editVehicleModel').value,
+                    engine: document.getElementById('editEngineSize').value
+                },
+                date: document.getElementById('editDate').value,
+                timeSlot: document.getElementById('editTimeSlot').value,
+                notes: document.getElementById('editNotes').value,
+                status: document.getElementById('editStatus').value,
+                createdAt: appointments.find(a => a.id === currentEditingAppointmentId).createdAt
+            };
+            
+            try {
+                await database.ref(`appointments/${currentEditingAppointmentId}`).set(updatedAppointment);
+                closeEditAppointmentModal();
+                loadAppointmentsFromDB();
+            } catch (error) {
+                console.error('Error saving appointment:', error);
+                alert('Failed to save changes. Please try again.');
+            }
+        }
+
+        function deleteAppointment(id) {
+            if (!confirm(t('deleteAppointmentConfirm'))) {
+                return;
+            }
+            
+            if (!database) {
+                alert('Database connection lost. Please refresh the page.');
+                return;
+            }
+            
+            database.ref(`appointments/${id}`).remove()
+                .then(() => {
+                    loadAppointmentsFromDB();
+                })
+                .catch(error => {
+                    console.error('Error deleting appointment:', error);
+                    alert('Failed to delete appointment. Please try again.');
+                });
+        }
+    </script>
+</body>
+</html>
